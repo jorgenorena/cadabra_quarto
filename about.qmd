@@ -1,0 +1,5 @@
+---
+title: "About"
+---
+
+A simple setup for integrating Cadabra and quarto.

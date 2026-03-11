@@ -1,0 +1,12 @@
+from algebra.defs import *
+from algebra.expand_cd import *
+
+ex := \nabla_{a}{T^{b}_{c}};
+
+result = expand_cd(ex, cd=r'\nabla', pd=r'\partial', conn=r'\Gamma', to_index_set='spacetime');
+
+canonicalise(result);
+
+latex_code = result._latex_()
+with open("results/test_covariant_derivative.tex", "w") as f:
+    f.write(latex_code + "\n")

@@ -1,0 +1,39 @@
+---
+title: "Test: Covariant Derivative"
+cadabra-deps:
+    - "tests/test_covariant_derivative.cdb"
+    - "tests/test_adm_kinematics.cdb"
+---
+
+If the pipeline works, this should output the covariant derivative of the tensor $T^b{}_c$ in terms of the partial derivative and the Christoffel symbols.
+
+```{python}
+#| echo: false
+#| output: asis
+
+from pathlib import Path
+
+tex = Path("results/test_covariant_derivative.tex").read_text(encoding="utf-8").strip()
+
+print("::: {.scroll-math}")
+print("$$")
+print(tex)
+print("$$")
+print(":::")
+```
+
+```{python}
+#| echo: false
+#| output: asis
+
+from pathlib import Path
+
+tex = Path("results/test_adm_kinematics.tex").read_text(encoding="utf-8").strip()
+tex = tex.replace(r"\GammaThree", r"{}^{(3)}\Gamma")
+
+print("::: {.scroll-math}")
+print("$$")
+print(tex)
+print("$$")
+print(":::")
+```

@@ -1,0 +1,16 @@
+---
+title: "Cadabra and Quarto: A Test"
+bibliography: "references.bib"
+csl: "myrefs.csl"
+---
+
+This is a Quarto website that uses [Cadabra](https://cadabra.science) for calculations @Peeters:2007wn.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+
+If everything in [this page](test_covariant_derivative.qmd) works, you should see the covariant derivative of a tensor in terms of the partial derivative and the Christoffel symbols, as well as some ADM kinematics expressions.
+
+## References
+
+::: {#refs}
+:::

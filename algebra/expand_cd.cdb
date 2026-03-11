@@ -1,0 +1,45 @@
+def expand_cd(ex,
+    cd=r'\nabla',
+    pd=r'\partial',
+    conn=r'\Gamma',
+    tmp_prefix='cdx',
+    from_index_set='tmp',
+    to_index_set=None):
+
+    counter = 0
+
+    while len(list(ex[cd])) > 0:
+        tmp := @(ex).
+
+        for nabla in tmp[cd]:
+            nabla.name = pd
+            dindex = nabla.indices().__next__()
+            corr := 0.
+
+            for arg in nabla.args():
+                for index in arg.free_indices():
+                    t2 := @(arg).
+                    counter = counter + 1
+                    nu = Ex(tmp_prefix + str(counter))
+
+                    if index.parent_rel == sub:
+                        t1 = Ex(conn + "^{%s}_{%s %s}" % (str(nu), str(dindex), str(index)))
+                        t2[index] := _{@(nu)}.
+                        corr -= Ex(str(nabla.multiplier)) * t1 * t2
+                    else:
+                        t1 = Ex(conn + "^{%s}_{%s %s}" % (str(index), str(dindex), str(nu)))
+                        t2[index] := ^{@(nu)}.
+                        corr += Ex(str(nabla.multiplier)) * t1 * t2
+
+            nabla += corr
+            break
+
+        ex = tmp
+
+        if from_index_set is not None and to_index_set is not None:
+            rename_dummies(ex, from_index_set, to_index_set)
+        else:
+            rename_dummies(ex)
+
+    distribute(ex, repeat=True)
+    return ex

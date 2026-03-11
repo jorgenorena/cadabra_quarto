@@ -1,0 +1,29 @@
+# temporary pool for generated dummy indices
+{cdx1,cdx2,cdx3,cdx4,cdx5,cdx6,cdx7,cdx8,cdx9,cdx10, cdx11,cdx12,cdx13,cdx14,cdx15,cdx16,cdx17,cdx18,cdx19,cdx20, cdx21,cdx22,cdx23,cdx24,cdx25,cdx26,cdx27,cdx28,cdx29,cdx30, cdx31,cdx32,cdx33,cdx34,cdx35,cdx36,cdx37,cdx38,cdx39,cdx40}::Indices(tmp, position=fixed).
+
+{a,b,c,d,e,f,g,h}::Indices(spacetime, position=fixed).
+{I,J,K,L,M,N,P,Q,R,S}::Indices(space_fixed, position=fixed).
+{i,j,k,\ell,m,n,p,q,r,s}::Indices(space, position=free).
+
+\partial{#}::PartialDerivative.
+\nabla{#}::Derivative.
+D{#}::Derivative.
+
+g_{\mu\nu}::Symmetric.
+g^{\mu\nu}::Symmetric.
+\gamma_{I J}::Symmetric.
+\gamma^{I J}::Symmetric.
+K_{I J}::Symmetric.
+
+t::Coordinate.
+{x,y,z}::Coordinate.
+N::Depends(t,x).
+
+N^{I}::Depends(t,x).
+N_{I}::Depends(t,x).
+\phi::Depends(t,x).
+\psi::Depends(t,x).
+\zeta::Depends(t,x).
+
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+C^{I}_{J K}::TableauSymmetry(shape={2}, indices={1,2}).

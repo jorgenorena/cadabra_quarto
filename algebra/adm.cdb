@@ -1,0 +1,19 @@
+adm_metric := {
+  g_{t t} -> -N N + N_{i} N^{i},
+  g_{t i} -> N_{i},
+  g_{i t} -> N_{i},
+  g_{i j} -> \gamma_{i j}
+};
+
+adm_inverse := {
+  g^{t t} -> -1/N^2,
+  g^{t i} -> N^{i}/N^2,
+  g^{i t} -> N^{i}/N^2,
+  g^{i j} -> \gamma^{i j} - N^{i} N^{j}/N^2
+};
+
+extrinsic_curvature := {
+  K_{i j} -> 1/(2 N) ( -\partial_{t}{\gamma_{i j}}
+                        + D_{i}{N_{j}}
+                        + D_{j}{N_{i}} )
+};
