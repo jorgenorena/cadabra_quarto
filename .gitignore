@@ -12,6 +12,8 @@ wheels/
 # Quarto
 /.quarto/
 _site/**
+*.quarto_ipynb
 
 # Logs
 logs/**
+results/**
