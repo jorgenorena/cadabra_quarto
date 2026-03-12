@@ -1,4 +1,5 @@
 import os
+import shlex
 import time
 import subprocess
 from collections import defaultdict
@@ -17,6 +18,10 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Command used to run Cadabra
 # Adjust if your executable is named differently
 CADABRA_CMD = ["cadabra2"]
+
+# Command used to run Quarto.
+# Override with QUARTO_CMD, e.g. QUARTO_CMD="uv run quarto"
+QUARTO_CMD = shlex.split(os.environ.get("QUARTO_CMD", "quarto"))
 
 LOGS_DIR = PROJECT_ROOT / "logs"
 
@@ -145,8 +150,49 @@ def run_cadabra(cdb_file: Path) -> None:
         )
 
 
-def touch(path: Path) -> None:
-    path.touch()
+def run_quarto_render(qmd_file: Path) -> None:
+    rel_qmd_file = qmd_file.relative_to(PROJECT_ROOT)
+    cmd = QUARTO_CMD + ["render", str(rel_qmd_file)]
+
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            env=os.environ.copy(),
+        )
+    except FileNotFoundError as exc:
+        raise RuntimeError(
+            "Quarto command not found. Set QUARTO_CMD if needed, "
+            'for example QUARTO_CMD="uv run quarto".'
+        ) from exc
+
+    if result.stdout:
+        print(result.stdout, end="")
+    if result.stderr:
+        print(result.stderr, end="")
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Quarto render failed for {rel_qmd_file}\n"
+            f"STDOUT:\n{result.stdout}\n\nSTDERR:\n{result.stderr}"
+        )
+
+
+def iter_tex_outputs(cdb_file: Path) -> list[Path]:
+    output_dir = PROJECT_ROOT / "results" / cdb_file.stem
+    tex_files: list[Path] = []
+
+    if output_dir.is_dir():
+        tex_files.extend(sorted(path for path in output_dir.glob("*.tex") if path.is_file()))
+
+    legacy_output = PROJECT_ROOT / "results" / f"{cdb_file.stem}.tex"
+    if legacy_output.is_file():
+        tex_files.append(legacy_output)
+
+    return tex_files
 
 
 def build_one(cdb_file: Path, inverse_deps: dict[Path, set[Path]]) -> None:
@@ -158,14 +204,13 @@ def build_one(cdb_file: Path, inverse_deps: dict[Path, set[Path]]) -> None:
     print(f"[build] Running Cadabra on {cdb_file.relative_to(PROJECT_ROOT)}")
     run_cadabra(cdb_file)
 
-    tex_file = PROJECT_ROOT / "results" / f"{cdb_file.stem}.tex"
-    if tex_file.exists():
+    for tex_file in iter_tex_outputs(cdb_file):
         fix_cadabra_file(tex_file)
         print(f"[build] Fixed LaTeX in {tex_file.relative_to(PROJECT_ROOT)}")
 
     for qmd_file in sorted(dependents):
-        touch(qmd_file)
-        print(f"[build] Touched {qmd_file.relative_to(PROJECT_ROOT)} for Quarto rebuild")
+        print(f"[build] Rendering {qmd_file.relative_to(PROJECT_ROOT)} with Quarto")
+        run_quarto_render(qmd_file)
 
 
 def initial_build(inverse_deps: dict[Path, set[Path]]) -> None:
