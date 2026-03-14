@@ -13,7 +13,10 @@ from fix_cadabra_latex import fix_cadabra_file
 # Configuration
 # -----------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+try:
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent
+except NameError:
+    PROJECT_ROOT = Path.cwd()
 
 # Command used to run Cadabra
 # Adjust if your executable is named differently

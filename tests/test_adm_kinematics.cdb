@@ -2,12 +2,17 @@ from algebra.defs import *
 from algebra.expand_cd import *
 from algebra.adm import *
 
+# For output
+from pathlib import Path
+path = Path(__name__).parent / "results" / "background_dS"
+path.mkdir(parents=True, exist_ok=True)
+
 ex := D_{I}{A^{J}_{K}};
 
 result = expand_cd(ex, cd=r'D', pd=r'\partial', conn=r'\GammaThree', to_index_set='space_fixed');
 
-canonicalise(ex);
+canonicalise(result);
 
 latex_code = result._latex_()
-with open("results/test_adm_kinematics.tex", "w") as f:
+with open(path / "test_adm_kinematics.tex", "w") as f:
     f.write(latex_code + "\n")

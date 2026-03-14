@@ -7,7 +7,20 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - text: "Calculations"
+        menu:
+        - text: "Pure dS"
+        - text: "Background"
+          href: dS_background.qmd
+        - text: "------"
       - about.qmd
+  sidebar:
+    style: "docked"
+    contents:
+      - section: "Pure dS"
+        contents:
+          - text: "Background"
+            href: dS_background.qmd
 
 format:
   html:
@@ -17,5 +30,6 @@ format:
     css: styles.css
     toc: true
 
-
-
+execute:
+  echo: false
+  output: asis

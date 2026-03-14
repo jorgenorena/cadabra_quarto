@@ -1,6 +1,11 @@
 from algebra.defs import *
 from algebra.expand_cd import *
 
+# For output
+from pathlib import Path
+path = Path(__name__).parent / "results" / "background_dS"
+path.mkdir(parents=True, exist_ok=True)
+
 ex := \nabla_{a}{T^{b}_{c}};
 
 result = expand_cd(ex, cd=r'\nabla', pd=r'\partial', conn=r'\Gamma', to_index_set='spacetime');
@@ -8,5 +13,5 @@ result = expand_cd(ex, cd=r'\nabla', pd=r'\partial', conn=r'\Gamma', to_index_se
 canonicalise(result);
 
 latex_code = result._latex_()
-with open("results/test_covariant_derivative.tex", "w") as f:
+with open(path / "test_covariant_derivative.tex", "w") as f:
     f.write(latex_code + "\n")
